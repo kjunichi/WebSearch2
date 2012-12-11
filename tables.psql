@@ -1,0 +1,5 @@
+create table related_url(
+meisi varchar(128),
+url varchar(250),
+primary key(meisi,url)
+)

@@ -1,0 +1,191 @@
+package com.cocolog_nifty.kjunichi;
+
+import java.io.EOFException;
+import java.net.ConnectException;
+import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
+import java.net.URL;
+import java.net.UnknownHostException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import com.meterware.httpunit.HttpException;
+import com.meterware.httpunit.HttpNotFoundException;
+import com.meterware.httpunit.WebConversation;
+import com.meterware.httpunit.WebLink;
+import com.meterware.httpunit.WebRequest;
+import com.meterware.httpunit.WebResponse;
+
+public class CheckKeywordsClient extends Thread {
+	private int urlid = -1;
+	private String url = null;
+	private List<String> keywords = null;
+	private List<String> hasKeywords = null;
+	private List<String> links = null;
+	private String status = null;
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		if (status == null) {
+			this.status = "-1";
+		} else {
+			this.status = status;
+		}
+	}
+
+	public List<String> getLinks() {
+		return links;
+	}
+
+	public void setLinks(List<String> links) {
+		this.links = links;
+	}
+
+	public List<String> getKeywords() {
+		return keywords;
+	}
+
+	public void setKeywords(List<String> keywords) {
+		this.keywords = keywords;
+	}
+
+	public int getUrlid() {
+		return urlid;
+	}
+
+	public void setUrlid(int urlid) {
+		this.urlid = urlid;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+	public CheckKeywordsClient(int urlid, String url, List<String> keywords) {
+		setUrlid(urlid);
+		setUrl(url);
+		setKeywords(keywords);
+		// 保持キーワードのメモリ確保。
+		this.hasKeywords = new ArrayList<String>();
+		this.links = new ArrayList<String>();
+	}
+
+	@Override
+	public void run() {
+
+		try {
+			WebConversation wc = new WebConversation();
+			wc.setHeaderField("Referer",
+					"http://kjunichi.cocolog-nifty.com/misc/");
+
+			// ページを表示する
+			WebResponse homePage = wc.getResponse(this.getUrl());
+			this.setStatus(new Integer(homePage.getResponseCode()).toString());
+			if (homePage.getContentType().indexOf("text") < 0) {
+				// テキスト以外は対象外
+				return;
+			}
+
+			// 対象のページをテキストで取り出す
+			String text = homePage.getText();
+
+			// ページの解析
+			// ページ中にwikiのタイトルが含まれるかをチェック
+			List<String> keywords = getKeywords();
+			synchronized (keywords) {
+				for (String keyword : keywords) {
+					if ("RSS".equals(keyword) || "url".equals(keyword)
+							|| "rank".equals(keyword)) {
+						continue;
+					}
+
+					Pattern pattern = Pattern
+							.compile("^(\\d{2,4}-\\d{1,2}-\\d{1,2})");
+					Matcher matcher = pattern.matcher(keyword);
+					if (matcher.matches()) {
+						// 日付は除外。
+						continue;
+					}
+					//改善の余地あり 2010/1/14
+					if (text.indexOf(keyword) > -1) {
+						// 一致したリストを一致キーワードリストの追加
+						this.hasKeywords.add(keyword);
+					}
+				}
+			}
+			// リンクの登録
+			try {
+				WebLink[] webLinks = homePage.getLinks();
+				for (int i = 0; i < webLinks.length; i++) {
+					WebRequest wreq = webLinks[i].getRequest();
+					// http以外で始まるプロトコルは対象外にする。
+					URL url = null;
+					try {
+						url = wreq.getURL();
+						if (url.getProtocol().startsWith("http")) {
+							this.links.add(wreq.getURL().toString());
+						}
+					} catch (RuntimeException e) {
+						// 変なURLを無視
+
+					}
+
+				}
+			} catch (RuntimeException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		} catch (MalformedURLException mue) {
+			// 変なURLは無視。
+		} catch (HttpNotFoundException hnfe) {
+			// 404は無視。
+			this.setStatus("404");
+		} catch (HttpException he) {
+			// Http例外は無視。
+			this.setStatus("-1");
+		} catch (UnknownHostException uhe) {
+			// ホストがない場合も無視
+			this.setStatus("-1");
+		} catch (ConnectException ce) {
+			// コネクションタイムアウト等は無視
+			this.setStatus("-1");
+		} catch (EOFException ee) {
+			// IO例外も無視。
+		} catch (SocketTimeoutException stoe) {
+			// コネクションタイムアウト等は無視
+			this.setStatus("-1");
+		} catch (OutOfMemoryError ome) {
+			ome.printStackTrace();
+			this.setStatus("-1");
+		} catch (Throwable e) {
+			// 各クライアントで発生したエラーは呼び出し元に通知しない。
+			e.printStackTrace();
+			System.out.println("<- urlid = " + this.getUrlid());
+			System.out.println("<- url = " + this.getUrl());
+		}
+	}
+
+	public List<String> getHasKeywords() {
+		return hasKeywords;
+	}
+
+	public void setHasKeywords(List<String> hasKeywords) {
+		this.hasKeywords = hasKeywords;
+	}
+
+}

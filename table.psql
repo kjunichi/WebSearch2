@@ -1,0 +1,17 @@
+CREATE TABLE related_image
+(
+  meisi character varying(128) NOT NULL,
+  url character varying(250) NOT NULL,
+  lastupdate timestamp without time zone,
+  CONSTRAINT related_image_pkey PRIMARY KEY (meisi, url)
+) 
+
+CREATE TABLE related_keyword
+(
+  meisi character varying(128) NOT NULL,
+  keyword character varying(128) NOT NULL,
+  lastupdate timestamp without time zone,
+  CONSTRAINT related_keyword_pkey PRIMARY KEY (meisi, keyword)
+) 
+
+alter table related_image
