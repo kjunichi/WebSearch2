@@ -29,7 +29,7 @@ public class CheckKeywordsFromUrl {
 	 */
 	public void execute() {
 
-		// HTTP‚Ìƒ^ƒCƒ€ƒAƒEƒg‚Ìİ’è
+		// HTTPã®ã‚¿ã‚¤ãƒ ã‚¢ã‚¦ãƒˆã®è¨­å®š
 		System.setProperty("sun.net.client.defaultConnectTimeout", "10000");
 		System.setProperty("sun.net.client.defaultReadTimeout", "10000");
 
@@ -53,7 +53,7 @@ public class CheckKeywordsFromUrl {
 			System.exit(-1);
 		}
 
-		// URL–ˆ‚Éæ“¾‚µ‚½ƒy[ƒWƒ^ƒCƒgƒ‹‚ªƒy[ƒW’†‚ÉŠÜ‚Ü‚ê‚é‚©‚ğƒ`ƒFƒbƒN‚·‚é
+		// URLæ¯ã«å–å¾—ã—ãŸãƒšãƒ¼ã‚¸ã‚¿ã‚¤ãƒˆãƒ«ãŒãƒšãƒ¼ã‚¸ä¸­ã«å«ã¾ã‚Œã‚‹ã‹ã‚’ãƒã‚§ãƒƒã‚¯ã™ã‚‹
 
 		// int urlid = 1;
 		int urlid = 1608642;
@@ -63,12 +63,12 @@ public class CheckKeywordsFromUrl {
 		int savedFindUrlCount = -1;
 		ResultSet rs = null;
 		try {
-			// ƒzƒXƒg–¼•Û‘¶—pƒŠƒXƒg‚Ìì¬
+			// ãƒ›ã‚¹ãƒˆåä¿å­˜ç”¨ãƒªã‚¹ãƒˆã®ä½œæˆ
 			List<String> savedHostnames = new ArrayList<String>();
 
 			while (urlid > 0) {
 				int searchResultCount = 0;
-				// wikiƒy[ƒW‚Ìƒ^ƒCƒgƒ‹‚ğæ“¾‚·‚é
+				// wikiãƒšãƒ¼ã‚¸ã®ã‚¿ã‚¤ãƒˆãƒ«ã‚’å–å¾—ã™ã‚‹
 				List<String> list = null;
 				try {
 					list = Util.getWikiTitles();
@@ -79,7 +79,7 @@ public class CheckKeywordsFromUrl {
 					System.out.println("Mem info = "
 							+ (freeMemSize - rt.freeMemory()));
 
-					// URLƒe[ƒuƒ‹‚©‚çurlid‡‚Éˆ—‘ÎÛ‚Æ‚È‚éurl‚ğæ“¾‚·‚é
+					// URLãƒ†ãƒ¼ãƒ–ãƒ«ã‹ã‚‰urlidé †ã«å‡¦ç†å¯¾è±¡ã¨ãªã‚‹urlã‚’å–å¾—ã™ã‚‹
 					stmt = conn2.createStatement();
 
 					// String sql = getDataBaseQuery(urlid);
@@ -90,7 +90,7 @@ public class CheckKeywordsFromUrl {
 
 					CheckKeywordsClient clients[] = new CheckKeywordsClient[100];
 
-					// ŒŸõÀs
+					// æ¤œç´¢å®Ÿè¡Œ
 					System.out.println("sql" + sql);
 					rs = stmt.executeQuery(sql);
 
@@ -100,7 +100,7 @@ public class CheckKeywordsFromUrl {
 							if (rs.getObject(1) != null) {
 								String url = rs.getObject(1).toString();
 								savedMaxUrlId = Integer.parseInt(rs.getObject(2).toString());
-								// ‚·‚Å‚Éæ“¾—\’è‚ÌURL‚Æ“¯ˆêƒzƒXƒg‚©ƒ`ƒFƒbƒN‚·‚éB
+								// ã™ã§ã«å–å¾—äºˆå®šã®URLã¨åŒä¸€ãƒ›ã‚¹ãƒˆã‹ãƒã‚§ãƒƒã‚¯ã™ã‚‹ã€‚
 								URL checkUrl = null;
 								try {
 									checkUrl = new URL(url);
@@ -109,15 +109,15 @@ public class CheckKeywordsFromUrl {
 									boolean isSavedHostname = false;
 									for (String savedHostname : savedHostnames) {
 										if (hostname.equals(savedHostname)) {
-											// ‚·‚Å‚Éæ“¾‚µ‚½ƒhƒƒCƒ“‚Ìê‡AœŠO‚·‚éB
+											// ã™ã§ã«å–å¾—ã—ãŸãƒ‰ãƒ¡ã‚¤ãƒ³ã®å ´åˆã€é™¤å¤–ã™ã‚‹ã€‚
 											isSavedHostname = true;
 										}
 									}
 									if (!isSavedHostname) {
-										// æ“¾‚µ‚Ä‚¢‚È‚¢ƒzƒXƒg‚Ìê‡A‰ğÍˆ—‚ğs‚¤B
+										// å–å¾—ã—ã¦ã„ãªã„ãƒ›ã‚¹ãƒˆã®å ´åˆã€è§£æå‡¦ç†ã‚’è¡Œã†ã€‚
 										clients[i] = new CheckKeywordsClient(rs
 												.getInt(2), url, list);
-										// ƒL[ƒ[ƒh‚ªŠÜ‚Ü‚ê‚é‚©ƒXƒŒƒbƒh‚²‚Æ‚Éƒ`ƒFƒbƒN‚·‚éB
+										// ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰ãŒå«ã¾ã‚Œã‚‹ã‹ã‚¹ãƒ¬ãƒƒãƒ‰ã”ã¨ã«ãƒã‚§ãƒƒã‚¯ã™ã‚‹ã€‚
 										clients[i].start();
 										savedMaxUrlId = clients[i].getUrlid();
 										i++;
@@ -149,7 +149,7 @@ public class CheckKeywordsFromUrl {
 						urlid = urlid + 100;
 						continue;
 					}
-					// ƒXƒŒƒbƒh‚Ìˆ—‚ğ‘Ò‚Â
+					// ã‚¹ãƒ¬ãƒƒãƒ‰ã®å‡¦ç†ã‚’å¾…ã¤
 					for (int i = 0; i < searchResultCount; i++) {
 						int waitTime = 10 * 1000 - i * 2000;
 						if (waitTime <= 0) {
@@ -161,7 +161,7 @@ public class CheckKeywordsFromUrl {
 								+ " status = " + clients[i].getStatus());
 						System.out.println(" <-url : " + clients[i].getUrl());
 					}
-					// ƒL[ƒ[ƒh‚ğ‡”Ô‚ÉDB‚É“o˜^‚µ‚Ä‚¢‚­B
+					// ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰ã‚’é †ç•ªã«DBã«ç™»éŒ²ã—ã¦ã„ãã€‚
 					CheckKeywordsDao checkKeywordsDao = CheckKeywordsDao
 							.getInstance();
 					UrlDao urlDao = UrlDao.getInstance();
@@ -184,7 +184,7 @@ public class CheckKeywordsFromUrl {
 							}
 						}
 					}
-					// Œ©‚Â‚¯‚½Url‚à“o˜^‚·‚éB
+					// è¦‹ã¤ã‘ãŸUrlã‚‚ç™»éŒ²ã™ã‚‹ã€‚
 
 					RelatedImageDao relatedImageDao = RelatedImageDao
 							.getInstance();
@@ -192,21 +192,21 @@ public class CheckKeywordsFromUrl {
 					for (int i = 0; i < searchResultCount; i++) {
 						List<String> keywords = clients[i].getHasKeywords();
 						if (keywords.size() > 0) {
-							// ƒL[ƒ[ƒh‚ğŠÜ‚Şƒy[ƒW‚ÉŠÜ‚Ü‚ê‚éƒŠƒ“ƒN‚Ì‚İ‚ğ“o˜^‚·‚éB
+							// ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰ã‚’å«ã‚€ãƒšãƒ¼ã‚¸ã«å«ã¾ã‚Œã‚‹ãƒªãƒ³ã‚¯ã®ã¿ã‚’ç™»éŒ²ã™ã‚‹ã€‚
 							List<String> insertLinks = clients[i].getLinks();
 							try {
 								for (String link : insertLinks) {
 									if (Util.isOkUrl(link)) {
-										// URL‚Ì“o˜^
+										// URLã®ç™»éŒ²
 										urlDao.insertData(link, clients[i]
 												.getUrlid());
 
 									}
 									if (Util.isImageUrl(link)) {
-										// ‰æ‘œ‚ÉŠÖ˜A‚µ‚»‚¤‚ÈƒL[ƒ[ƒh‚ğ“o˜^
+										// ç”»åƒã«é–¢é€£ã—ãã†ãªã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰ã‚’ç™»éŒ²
 										for (String keyword : keywords) {
-											// ‰æ‘œ‚Æ‚µ‚Ä•s—v‚ÈƒL[ƒ[ƒh‚ğœŠO
-											if (keyword.equals("ƒŠƒ“ƒNW")) {
+											// ç”»åƒã¨ã—ã¦ä¸è¦ãªã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰ã‚’é™¤å¤–
+											if (keyword.equals("ãƒªãƒ³ã‚¯é›†")) {
 												continue;
 											}
 
@@ -216,12 +216,12 @@ public class CheckKeywordsFromUrl {
 									}
 								}// end for
 							} catch (ConcurrentModificationException cme) {
-								// ƒGƒ‰[‚ğ–³‹‚µ‚Ä‘±s
+								// ã‚¨ãƒ©ãƒ¼ã‚’ç„¡è¦–ã—ã¦ç¶šè¡Œ
 								cme.printStackTrace();
 							}
 						} // end if
 					} // end for
-					// ˆ—Ï‚İ‚Ìurlid‚Ìæ“¾
+					// å‡¦ç†æ¸ˆã¿ã®urlidã®å–å¾—
 					urlid = clients[searchResultCount - 1].getUrlid();
 					System.out.println(new Date().toString() + " done urlid = "
 							+ urlid + "\nsearchResultCount = "
@@ -238,16 +238,16 @@ public class CheckKeywordsFromUrl {
 					}
 
 				} catch (OutOfMemoryError ome) {
-					// ƒƒ‚ƒŠ[•s‘«‚Í–³‹
+					// ãƒ¡ãƒ¢ãƒªãƒ¼ä¸è¶³ã¯ç„¡è¦–
 					System.out.println("savedHostnames.clear");
 					savedHostnames.clear();
 				} catch (org.postgresql.util.PSQLException psqle) {
-					// PostgreSQL‚Ìƒƒ‚ƒŠ•s‘«‚à–³‹‚µ‚Ä‘±s‚·‚é
+					// PostgreSQLã®ãƒ¡ãƒ¢ãƒªä¸è¶³ã‚‚ç„¡è¦–ã—ã¦ç¶šè¡Œã™ã‚‹
 					System.out.println("savedHostnames.clear");
 					savedHostnames.clear();
 				}
 				savedFindUrlCount = searchResultCount;
-				// urlid‚ği‚ß‚éB
+				// urlidã‚’é€²ã‚ã‚‹ã€‚
 				urlid = urlid + 1;
 				if (list != null) {
 					list.clear();
@@ -283,14 +283,14 @@ public class CheckKeywordsFromUrl {
 
 	private String getFxQuery(int urlid) {
 		return "select u.url,u.urlid from url u,meisi m1 where u.urlid = m1.urlid "
-				+ " and (m1.meisi='ˆ×‘Ö' or m1.meisi='­•{Œnƒtƒ@ƒ“ƒh' or m1.meisi='FX') and u.urlid < "
+				+ " and (m1.meisi='ç‚ºæ›¿' or m1.meisi='æ”¿åºœç³»ãƒ•ã‚¡ãƒ³ãƒ‰' or m1.meisi='FX') and u.urlid < "
 				+ urlid + "  " + " order by urlid desc limit 100";
 
 	}
 
 	private String getXXXQuery(int urlid) {
 		return "select u.url,u.urlid from url u,meisi m1 where u.urlid = m1.urlid "
-				+ " and  u.status is null and m1.meisi='ƒAƒiƒ‹' and u.urlid < "
+				+ " and  u.status is null and m1.meisi='ã‚¢ãƒŠãƒ«' and u.urlid < "
 				+ urlid + "  " + " order by urlid desc limit 100";
 
 	}
@@ -306,7 +306,7 @@ public class CheckKeywordsFromUrl {
 
 	private String getDataBaseQuery(int urlid) {
 		return "select u.url,u.urlid from url u,meisi m1 where u.urlid = m1.urlid "
-				+ " and (m1.meisi='åƒL[' or m1.meisi='ŠÖ”]‘®' or m1.meisi='³‹K‰»') and u.urlid < "
+				+ " and (m1.meisi='ä¸»ã‚­ãƒ¼' or m1.meisi='é–¢æ•°å¾“å±' or m1.meisi='æ­£è¦åŒ–') and u.urlid < "
 				+ urlid + "  " + " order by urlid desc limit 100";
 
 	}
@@ -345,7 +345,7 @@ public class CheckKeywordsFromUrl {
 	}
 
 	/**
-	 * “o˜^‚·‚é‰¿’l‚ª‚ ‚éURL‚©”»’è‚·‚é
+	 * ç™»éŒ²ã™ã‚‹ä¾¡å€¤ãŒã‚ã‚‹URLã‹åˆ¤å®šã™ã‚‹
 	 * 
 	 * @param url
 	 * @return

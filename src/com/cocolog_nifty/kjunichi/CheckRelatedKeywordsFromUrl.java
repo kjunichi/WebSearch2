@@ -33,11 +33,11 @@ public class CheckRelatedKeywordsFromUrl {
 		List<String> meisis = new ArrayList<String>();
 		try {
 			Statement stmt = getConSmartMemo().createStatement();
-			// SQL•¶‚Ìì¬
+			// SQLæ–‡ã®ä½œæˆ
 			//String sql = "select distinct meisi from related_url where meisi > 'procmail' order by meisi";
 			String sql = "select distinct meisi from related_url order by meisi";
 			
-			// ŒŸõÀs
+			// æ¤œç´¢å®Ÿè¡Œ
 			ResultSet rs = stmt.executeQuery(sql);
 			if (rs != null) {
 				while (rs.next()) {
@@ -85,13 +85,13 @@ public class CheckRelatedKeywordsFromUrl {
 		PreparedStatement stmt = null;
 		try {
 
-			// SQL•¶‚Ìì¬
+			// SQLæ–‡ã®ä½œæˆ
 			// String sql = "select url from url u,meisi m where u.urlid=m.urlid
 			// and m.meisi like ?";
 			String sql = "select url from url u,meisi m where u.urlid = m.urlid and m.meisi like '"
 					+ keyword + "%'";
 			stmt = conn.prepareStatement(sql);
-			// ŒŸõÀs
+			// æ¤œç´¢å®Ÿè¡Œ
 			// stmt.setString(1, "'"+new
 			// String(keyword.getBytes("euc-jp"),"iso-8859-1") + "%'");
 			// stmt.setString(1, "'"+ keyword + "'");
@@ -114,7 +114,7 @@ public class CheckRelatedKeywordsFromUrl {
 
 	private void insertUrl(PreparedStatement pstmt, String keyword, String url) {
 		// System.out.println(url);
-		// related_urlƒe[ƒuƒ‹‚É“o˜^
+		// related_urlãƒ†ãƒ¼ãƒ–ãƒ«ã«ç™»éŒ²
 		try {
 			pstmt.setString(1, (String) keyword);
 			pstmt.setString(2, (String) url);
@@ -163,7 +163,7 @@ public class CheckRelatedKeywordsFromUrl {
 		}
 		setConWebSearch(conn2);
 
-		// wikiƒy[ƒW‚Ìƒ^ƒCƒgƒ‹‚ğæ“¾‚·‚é
+		// wikiãƒšãƒ¼ã‚¸ã®ã‚¿ã‚¤ãƒˆãƒ«ã‚’å–å¾—ã™ã‚‹
 		List<String> list = new ArrayList<String>();
 		List<String> meisis = this.getMeisi();
 		for (String meisi : meisis) {
@@ -171,11 +171,11 @@ public class CheckRelatedKeywordsFromUrl {
 			List<String> urls = new ArrayList<String>();
 			try {
 				stmt = getConSmartMemo().createStatement();
-				// SQL•¶‚Ìì¬
+				// SQLæ–‡ã®ä½œæˆ
 				String sql = "select url from related_url where meisi='"
 						+ meisi + "' order by url";
 
-				// ŒŸõÀs
+				// æ¤œç´¢å®Ÿè¡Œ
 				ResultSet rs = stmt.executeQuery(sql);
 				if (rs != null) {
 					while (rs.next()) {
@@ -237,12 +237,12 @@ public class CheckRelatedKeywordsFromUrl {
 		PreparedStatement stmt = null;
 		try {
 
-			// SQL•¶‚Ìì¬
+			// SQLæ–‡ã®ä½œæˆ
 			String sql = "select u.url from url u,meisi m where u.urlid = m.urlid and m.meisi=? order by meisi";
 			stmt = getConWebSearch().prepareStatement(sql);
 
 			stmt.setString(1, meisi);
-			// ŒŸõÀs
+			// æ¤œç´¢å®Ÿè¡Œ
 			ResultSet rs = stmt.executeQuery();
 			if (rs != null) {
 				while (rs.next()) {
@@ -270,13 +270,13 @@ public class CheckRelatedKeywordsFromUrl {
 		PreparedStatement stmt = null;
 		try {
 
-			// SQL•¶‚Ìì¬
+			// SQLæ–‡ã®ä½œæˆ
 			String sql = "select m.meisi from url u,meisi m where u.urlid = m.urlid and u.url=? order by m.meisi";
 			stmt = getConWebSearch().prepareStatement(sql);
 
 			for (String url : urls) {
 				stmt.setString(1, url);
-				// ŒŸõÀs
+				// æ¤œç´¢å®Ÿè¡Œ
 				ResultSet rs = stmt.executeQuery();
 				if (rs != null) {
 					while (rs.next()) {
