@@ -59,8 +59,8 @@ public class CheckRelatedKeywordsFromUrl {
 	private List<String> getUrlListByKeyword(String keyword) {
 		//String dbUrl = "jdbc:postgresql://192.168.0.198/websearch";
 		 String dbUrl = "jdbc:postgresql://192.168.0.178/websearch";
-		String dbUser = "";
-		String dbPassWord = "";
+		String dbUser = "junichi";
+		String dbPassWord = "jktp4xe";
 		System.out.println(keyword);
 		List urls = new ArrayList<String>();
 
@@ -129,13 +129,13 @@ public class CheckRelatedKeywordsFromUrl {
 
 	public void execute() {
 		String dbUrl = "jdbc:postgresql://192.168.0.198/smartmemo3";
-		String dbUser = "";
-		String dbPassWord = "";
+		String dbUser = "junichi";
+		String dbPassWord = "jkap5855";
 
 		String dbUrl2 = "jdbc:postgresql://192.168.0.198/websearch";
 		//String dbUrl2 = "jdbc:postgresql://192.168.0.178/websearch";
-		String dbUser2 = "";
-		String dbPassWord2 = "";
+		String dbUser2 = "junichi";
+		String dbPassWord2 = "jktp4xe";
 
 		try {
 			Class.forName("org.postgresql.Driver");

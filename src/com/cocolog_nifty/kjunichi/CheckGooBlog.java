@@ -1,5 +1,8 @@
 package com.cocolog_nifty.kjunichi;
 
+/**
+ * はてなダイアリーをチェックする
+ */
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -20,7 +23,7 @@ import java.util.regex.Pattern;
 import com.meterware.httpunit.WebConversation;
 import com.meterware.httpunit.WebResponse;
 
-public class CheckKeywordsFromUrl {
+public class CheckGooBlog {
 	static int savedMaxUrlId = -1;
 
 	/**
@@ -33,27 +36,9 @@ public class CheckKeywordsFromUrl {
 		System.setProperty("sun.net.client.defaultConnectTimeout", "10000");
 		System.setProperty("sun.net.client.defaultReadTimeout", "10000");
 
-		String dbUrl = "jdbc:postgresql://127.0.0.1/websearch";
-		String dbUser = "junichi";
-		String dbPassWord = "jktp4xe";
-
-		try {
-			Class.forName("org.postgresql.Driver");
-		} catch (Exception ex) {
-			System.out.println(ex);
-		}
-
 		Statement stmt = null;
-
-		Connection conn2 = null;
-		try {
-			conn2 = Util.getWebSearchConnection();
-		} catch (Exception ex) {
-			System.out.println(ex);
-			System.exit(-1);
-		}
-
-		// URL毎に取得したページタイトルがページ中に含まれるかをチェックする
+		Connection conn2 = Util.getWebSearchConnection();
+		
 
 		// int urlid = 1;
 		int urlid = 1608642;
@@ -65,13 +50,13 @@ public class CheckKeywordsFromUrl {
 		try {
 			// ホスト名保存用リストの作成
 			List<String> savedHostnames = new ArrayList<String>();
-
+			List<String> savedHatenaIds = new ArrayList<String>();
+			
 			while (urlid > 0) {
 				int searchResultCount = 0;
-				// wikiページのタイトルを取得する
 				List<String> list = null;
 				try {
-					list = Util.getWikiTitles();
+					list = this.getKeywords();
 					if (savedHostnames.size() > 2000) {
 						System.out.println("savedHostnames.clear");
 						savedHostnames.clear();
@@ -81,17 +66,12 @@ public class CheckKeywordsFromUrl {
 
 					// URLテーブルからurlid順に処理対象となるurlを取得する
 					stmt = conn2.createStatement();
-
-					// String sql = getDataBaseQuery(urlid);
-					// String sql = getXXXQuery(urlid);
-					// String sql = getHighRankQuery(urlid);
-					String sql = getHighRankQuery2(urlid); 
-					// String sql = getFxQuery(urlid);
+					String sql = getHighRankQuery2(urlid);
 
 					CheckKeywordsClient clients[] = new CheckKeywordsClient[100];
 
 					// 検索実行
-					System.out.println("sql" + sql);
+					System.out.println("sql : " + sql);
 					rs = stmt.executeQuery(sql);
 
 					if (rs != null) {
@@ -99,24 +79,27 @@ public class CheckKeywordsFromUrl {
 						while (rs.next() && i < 100) {
 							if (rs.getObject(1) != null) {
 								String url = rs.getObject(1).toString();
-								savedMaxUrlId = Integer.parseInt(rs.getObject(2).toString());
+								savedMaxUrlId = Integer.parseInt(rs
+										.getObject(2).toString());
 								// すでに取得予定のURLと同一ホストかチェックする。
 								URL checkUrl = null;
 								try {
 									checkUrl = new URL(url);
 
 									String hostname = checkUrl.getHost();
+									String gooId = checkUrl.getPath().split("/")[1];
+									System.out.println("id = " + gooId);
 									boolean isSavedHostname = false;
-									for (String savedHostname : savedHostnames) {
-										if (hostname.equals(savedHostname)) {
+									for (String savedGooId : savedHatenaIds) {
+										if (gooId.equals(savedGooId)) {
 											// すでに取得したドメインの場合、除外する。
 											isSavedHostname = true;
 										}
 									}
 									if (!isSavedHostname) {
 										// 取得していないホストの場合、解析処理を行う。
-										clients[i] = new CheckKeywordsClient(rs
-												.getInt(2), url, list);
+										clients[i] = new CheckKeywordsClient(
+												rs.getInt(2), url, list);
 										// キーワードが含まれるかスレッドごとにチェックする。
 										clients[i].start();
 										savedMaxUrlId = clients[i].getUrlid();
@@ -172,8 +155,9 @@ public class CheckKeywordsFromUrl {
 						String insertUrl = clients[i].getUrl();
 						if (Util.isOkUrl(insertUrl)) {
 							int insertUrlid = clients[i].getUrlid();
-							urlDao.updateRank(insertUrlid, insertKeywords
-									.size(), clients[i].getStatus());
+							urlDao.updateRank(insertUrlid,
+									insertKeywords.size(),
+									clients[i].getStatus());
 							try {
 								for (String keyword : insertKeywords) {
 									checkKeywordsDao.insertData(keyword,
@@ -198,8 +182,8 @@ public class CheckKeywordsFromUrl {
 								for (String link : insertLinks) {
 									if (Util.isOkUrl(link)) {
 										// URLの登録
-										urlDao.insertData(link, clients[i]
-												.getUrlid());
+										urlDao.insertData(link,
+												clients[i].getUrlid());
 
 									}
 									if (Util.isImageUrl(link)) {
@@ -221,7 +205,7 @@ public class CheckKeywordsFromUrl {
 							}
 						} // end if
 					} // end for
-					// 処理済みのurlidの取得
+						// 処理済みのurlidの取得
 					urlid = clients[searchResultCount - 1].getUrlid();
 					System.out.println(new Date().toString() + " done urlid = "
 							+ urlid + "\nsearchResultCount = "
@@ -281,84 +265,33 @@ public class CheckKeywordsFromUrl {
 
 	
 
-	private String getFxQuery(int urlid) {
-		return "select u.url,u.urlid from url u,meisi m1 where u.urlid = m1.urlid "
-				+ " and (m1.meisi='為替' or m1.meisi='政府系ファンド' or m1.meisi='FX') and u.urlid < "
-				+ urlid + "  " + " order by urlid desc limit 100";
-
-	}
-
-	private String getXXXQuery(int urlid) {
-		return "select u.url,u.urlid from url u,meisi m1 where u.urlid = m1.urlid "
-				+ " and  u.status is null and m1.meisi='アナル' and u.urlid < "
-				+ urlid + "  " + " order by urlid desc limit 100";
-
-	}
-
-	private String getMacQuery(int urlid) {
-		return "select u.url,u.urlid from url u,meisi m1 where u.urlid = m1.urlid "
-				+ " and m1.meisi='MacBook' and u.urlid < "
-				+ urlid
-				+ "  "
-				+ " order by urlid desc limit 100";
-
-	}
-
-	private String getDataBaseQuery(int urlid) {
-		return "select u.url,u.urlid from url u,meisi m1 where u.urlid = m1.urlid "
-				+ " and (m1.meisi='主キー' or m1.meisi='関数従属' or m1.meisi='正規化') and u.urlid < "
-				+ urlid + "  " + " order by urlid desc limit 100";
-
-	}
-
-	private String getHighRankQuery(int urlid) {
-		return "select u.url,u.urlid from url u,link2 l where u.urlid < "
-				+ urlid
-				+ " and u.url like '%tdiary%html' and u.url=l.url and 2 < (select u2.rank from url u2 where u2.urlid=l.source_urlid)"
-				+ " and (u.status is null)" + " order by urlid desc limit 100";
-
-	}
-
-	static int targetUrlid = 622510953;
+	static int targetUrlid = 0;
 
 	private String getHighRankQuery2(int urlid) {
-		// return "select u.url,u.urlid from url u,link2 l where u.urlid < "
-		// + urlid
-		// +
-		// " and u.url like '%html' and u.url=l.url and 2 < (select u2.rank from url u2 where u2.urlid=l.source_urlid)"
-		// + " and (u.status is null)"
-		// + " order by urlid desc limit 25000";
+
 		if (savedMaxUrlId == -1) {
 			targetUrlid = targetUrlid;
 		} else {
 			targetUrlid = savedMaxUrlId;
 		}
-		return "select u.url,u.urlid from url u where url like 'http://%tdiary/%' and (u.status is null and (rank >=0 or rank is null) ) and u.urlid > "
+		return "select u.url,u.urlid from url u where (u.status is null and (rank >=0 or rank is null) ) "
+				+" and url like 'http://blog.goo.ne.jp/%/' and u.urlid > "
 				+ targetUrlid + " order by urlid limit 1000";
 	}
 
-	private List<String> getKeywordsFromUrl(String url) {
-		List<String> keywords = new ArrayList<String>();
-		// CheckKeywordsClient client = new CheckKeywordsClient(-1,url);
-
-		return keywords;
+	private List<String> getKeywords() {
+		List<String> list = new ArrayList<String>();
+		list.add("node.js");
+		list.add("selenium");
+		list.add("OpenCL");
+		list.add("jsdo.it");
+		list.add("three.js");
+		return list;
 	}
-
-	/**
-	 * 登録する価値があるURLか判定する
-	 * 
-	 * @param url
-	 * @return
-	 */
-	private boolean isWorthyUrl(String url) {
-		return false;
-	}
-
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		new CheckKeywordsFromUrl().execute();
+		new CheckGooBlog().execute();
 	}
 }

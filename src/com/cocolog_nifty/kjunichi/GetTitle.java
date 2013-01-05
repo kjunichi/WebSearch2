@@ -38,8 +38,8 @@ public class GetTitle {
 
 	public void execute() {
 		String dbUrl = "jdbc:postgresql://192.168.0.198/smartmemo3";
-		String dbUser = "";
-		String dbPassWord = "";
+		String dbUser = "junichi";
+		String dbPassWord = "jktp4xe";
 
 		Connection conn = null;
 		Statement stmt = null;

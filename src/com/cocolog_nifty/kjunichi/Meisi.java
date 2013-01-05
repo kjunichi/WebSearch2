@@ -30,8 +30,8 @@ public class Meisi {
 		String[] keywords = getMeisi().split(" ");
 
 		String dbUrl = "jdbc:postgresql://192.168.0.198/websearch";
-		String dbUser = "";
-		String dbPassWord = "";
+		String dbUser = "junichi";
+		String dbPassWord = "jktp4xe";
 
 		Connection conn = null;
 		PreparedStatement stmt = null;

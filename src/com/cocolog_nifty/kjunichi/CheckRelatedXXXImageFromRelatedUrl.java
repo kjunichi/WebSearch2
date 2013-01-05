@@ -19,7 +19,7 @@ import com.meterware.httpunit.WebConversation;
 import com.meterware.httpunit.WebImage;
 import com.meterware.httpunit.WebResponse;
 
-public class CheckRelatedImageFromRelatedUrl {
+public class CheckRelatedXXXImageFromRelatedUrl {
 
 	private List<String> getUrlListByKeyword(String keyword) {
 		String dbUrl = "jdbc:postgresql://192.168.0.178/websearch";
@@ -53,8 +53,7 @@ public class CheckRelatedImageFromRelatedUrl {
 			// SQL文の作成
 			// String sql = "select url from url u,meisi m where u.urlid=m.urlid
 			// and m.meisi like ?";
-			String sql = "select url from url u,meisi m where u.urlid = m.urlid and m.meisi like '"
-					+ keyword + "%'";
+			String sql = "select url from url u,meisi m where u.urlid = m.urlid and (m.meisi is 'まんこ' or m.meisi is 'アナル' or m.meisi is '強姦'　or m.meisi is 'レイプ'　or m.meisi is '流出')";
 			stmt = conn.prepareStatement(sql);
 			// 検索実行
 			// stmt.setString(1, "'"+new
@@ -127,9 +126,9 @@ public class CheckRelatedImageFromRelatedUrl {
 		}
 
 		try {
-			stmt = conn.createStatement();
+			stmt = connWebsearch.createStatement();
 			// SQL文の作成
-			String sql = "select meisi,url from related_url where meisi > '車' order by meisi";
+			String sql = "select m.meisi,u.url from url u,meisi m where u.urlid = m.urlid and (m.meisi='まんこ' or m.meisi='アナル' or m.meisi='強姦' or m.meisi='レイプ' or m.meisi='流出')";
 
 			// 検索実行
 			ResultSet rs = stmt.executeQuery(sql);
@@ -159,7 +158,7 @@ public class CheckRelatedImageFromRelatedUrl {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		new CheckRelatedImageFromRelatedUrl().execute();
+		new CheckRelatedXXXImageFromRelatedUrl().execute();
 	}
 
 	private String[] getImageUrls(String url) {

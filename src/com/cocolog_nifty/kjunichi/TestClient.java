@@ -18,7 +18,8 @@ public class TestClient {
 
 		try {
 			WebConversation wc = new WebConversation();
-			//wc.setHeaderField("Referer","");
+			wc.setHeaderField("Referer",
+					"http://kjunichi.cocolog-nifty.com/misc/");
 
 			// ページを表示する
 			WebResponse homePage = wc.getResponse(url);

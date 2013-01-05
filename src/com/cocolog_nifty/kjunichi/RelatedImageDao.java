@@ -12,14 +12,9 @@ public class RelatedImageDao {
 
 	private void init() {
 
-		String dbUrl = "jdbc:postgresql://127.0.0.1/smartmemo3";
-		String dbUser = "";
-		String dbPassWord = "";
-
 		try {
-			Class.forName("org.postgresql.Driver");
-			connSmartMemo = DriverManager.getConnection(dbUrl, dbUser,
-					dbPassWord);
+
+			connSmartMemo = Util.getSmartMemoConnection();
 		} catch (Exception ex) {
 			System.out.println(ex);
 		}

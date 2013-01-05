@@ -27,8 +27,8 @@ public class RegistUrl {
 		}
 		// URL‚ð“o˜^‚·‚é
 		String dbUrl = "jdbc:postgresql://192.168.0.178/websearch";
-		String dbUser = "";
-		String dbPassWord = "";
+		String dbUser = "junichi";
+		String dbPassWord = "jkap5855";
 
 	}
 
@@ -37,8 +37,8 @@ public class RegistUrl {
 			return "";
 		}
 		String dbUrl = "jdbc:postgresql://192.168.0.178/websearch";
-		String dbUser = "";
-		String dbPassWord = "";
+		String dbUser = "junichi";
+		String dbPassWord = "jkap5855";
 
 		Connection conn = null;
 		PreparedStatement stmt = null;

@@ -1,0 +1,7 @@
+{
+  "dbparam": {
+    "db_url": "jdbc:postgresql://192.168.0.1/websearch",
+    "db_user": "junichi",
+    "db_passwd": ""
+  }
+}

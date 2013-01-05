@@ -32,7 +32,7 @@ public class Util {
 	public static Connection getWebSearchConnection() {
 		String dbUrl = Const.WS_DB_URL;
 		String dbUser = Const.WS_DB_USER;
-		String dbPassWord = "jktp4xe";
+		String dbPassWord = "";
 		Connection conn = null;
 		try {
 			Class.forName("org.postgresql.Driver");

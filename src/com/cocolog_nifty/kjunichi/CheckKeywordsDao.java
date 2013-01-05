@@ -1,7 +1,6 @@
 package com.cocolog_nifty.kjunichi;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
@@ -12,20 +11,10 @@ public class CheckKeywordsDao {
 
 	private void init() {
 
-		String dbUrl = "jdbc:postgresql://127.0.0.1/smartmemo3";
-		String dbUser = "";
-		String dbPassWord = "";
-
-		String dbUrl2 = "jdbc:postgresql://127.0.0.1/websearch";
-		String dbUser2 = "";
-		String dbPassWord2 = "";
-
 		try {
 			Class.forName("org.postgresql.Driver");
-			connSmartMemo = DriverManager.getConnection(dbUrl, dbUser,
-					dbPassWord);
-			connWebSearch = DriverManager.getConnection(dbUrl2, dbUser2,
-					dbPassWord2);
+			connSmartMemo =Util.getSmartMemoConnection();
+			connWebSearch = Util.getWebSearchConnection();
 		} catch (Exception ex) {
 			System.out.println(ex);
 		}
@@ -33,7 +22,7 @@ public class CheckKeywordsDao {
 	}
 /**
  * 
- * @param keyword ƒL[ƒ[ƒh
+ * @param keyword ï¿½Lï¿½[ï¿½ï¿½ï¿½[ï¿½h
  * @param urlid urlid
  * @param url URL
  */
@@ -42,7 +31,7 @@ public class CheckKeywordsDao {
 		PreparedStatement pstmt = null;
 
 		try {
-			// meisiƒe[ƒuƒ‹‚ÉƒL[ƒ[ƒh‚ğ“o˜^
+			// meisiï¿½eï¿½[ï¿½uï¿½ï¿½ï¿½ï¿½ï¿½Lï¿½[ï¿½ï¿½ï¿½[ï¿½hï¿½ï¿½ï¿½oï¿½^
 			pstmt = connWebSearch
 					.prepareStatement("insert into meisi (meisi,urlid,itimestamp)values(?,?,now())");
 			pstmt.setString(1, keyword);
@@ -51,7 +40,7 @@ public class CheckKeywordsDao {
 			pstmt.executeUpdate();
 			pstmt.close();
 			pstmt = null;
-			// ŠÖ˜AURLƒe[ƒuƒ‹‚ÉURL‚ğ“o˜^
+			// ï¿½ï¿½ï¿½AURLï¿½eï¿½[ï¿½uï¿½ï¿½ï¿½ï¿½URLï¿½ï¿½ï¿½oï¿½^
 			String insertSql = "insert into related_url(meisi,url,lastupdate) values (?,?,now())";
 
 			pstmt = connSmartMemo.prepareStatement(insertSql);
@@ -60,7 +49,7 @@ public class CheckKeywordsDao {
 			int rs = pstmt.executeUpdate();
 			pstmt.close();
 			pstmt = null;
-			System.out.println(keyword + " V‹K“o˜^ : " + url);
+			System.out.println(keyword + " ï¿½Vï¿½Kï¿½oï¿½^ : " + url);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			// e.printStackTrace();

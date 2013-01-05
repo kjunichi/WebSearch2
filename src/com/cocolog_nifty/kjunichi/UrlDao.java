@@ -12,35 +12,17 @@ public class UrlDao {
 	static private Connection connWebSearch = null;
 
 	private void init() {
-
-		String dbUrl = "jdbc:postgresql://127.0.0.1/smartmemo3";
-		String dbUser = "";
-		String dbPassWord = "";
-
-		String dbUrl2 = "jdbc:postgresql://127.0.0.1/websearch";
-		String dbUser2 = "";
-		String dbPassWord2 = "";
-
-		try {
-			Class.forName("org.postgresql.Driver");
-			connSmartMemo = DriverManager.getConnection(dbUrl, dbUser,
-					dbPassWord);
-			connWebSearch = DriverManager.getConnection(dbUrl2, dbUser2,
-					dbPassWord2);
-		} catch (Exception ex) {
-			System.out.println(ex);
-		}
-
+		connSmartMemo = Util.getSmartMemoConnection();
+		connWebSearch = Util.getWebSearchConnection();
 	}
 
-	public synchronized void insertData(String url,int sourceUrlid) {
+	public synchronized void insertData(String url, int sourceUrlid) {
 
 		PreparedStatement pstmt = null;
 
-
 		try {
 			// link2ƒe[ƒuƒ‹‚ÉƒŠƒ“ƒNŒ³url‚ğ“o˜^
-			
+
 			pstmt = connWebSearch
 					.prepareStatement("insert into link2 (url,source_urlid,lastupdate)values(?,?,now())");
 			pstmt.setString(1, url);
@@ -49,10 +31,10 @@ public class UrlDao {
 			pstmt.close();
 			pstmt = null;
 			if (recCount > 0) {
-				//System.out.println("URLV‹K“o˜^ : " + url);
+				// System.out.println("URLV‹K“o˜^ : " + url);
 			}
 		} catch (SQLException e) {
-			//e.printStackTrace();
+			// e.printStackTrace();
 		} finally {
 			if (pstmt != null) {
 				try {
@@ -75,11 +57,11 @@ public class UrlDao {
 			if (recCount > 0) {
 				System.out.println("URLV‹K“o˜^ : " + url);
 			}
-			
+
 		} catch (SQLException e) {
 			// d•¡“o˜^‚ÅƒGƒ‰[‚ª”­¶‚·‚é‚±‚Æ‚ª‚ ‚éB
 			// TODO Auto-generated catch block
-			//e.printStackTrace();
+			// e.printStackTrace();
 		} finally {
 			if (pstmt != null) {
 				try {

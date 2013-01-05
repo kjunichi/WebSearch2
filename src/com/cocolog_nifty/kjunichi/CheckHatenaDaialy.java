@@ -71,7 +71,7 @@ public class CheckHatenaDaialy {
 					CheckKeywordsClient clients[] = new CheckKeywordsClient[100];
 
 					// åüçıé¿çs
-					System.out.println("sql" + sql);
+					System.out.println("sql : " + sql);
 					rs = stmt.executeQuery(sql);
 
 					if (rs != null) {
@@ -265,7 +265,7 @@ public class CheckHatenaDaialy {
 
 	
 
-	static int targetUrlid = 806562316;
+	static int targetUrlid = 773200642;
 
 	private String getHighRankQuery2(int urlid) {
 

@@ -15,8 +15,8 @@ public class GetMeisi {
 	
 	public void execute() {
 		String dbUrl = "jdbc:postgresql://192.168.0.198/websearch";
-		String dbUser = "";
-		String dbPassWord = "";
+		String dbUser = "junichi";
+		String dbPassWord = "jkap5855";
 
 		Connection conn = null;
 		Statement stmt = null;

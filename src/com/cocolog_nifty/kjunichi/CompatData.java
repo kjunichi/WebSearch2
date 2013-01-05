@@ -11,8 +11,8 @@ import java.util.List;
 public class CompatData {
 	String dbUrl = "jdbc:postgresql://192.168.0.198/websearch";
 	// String dbUrl = "jdbc:postgresql://192.168.0.192/websearch";
-	String dbUser = "";
-	String dbPassWord = "";
+	String dbUser = "junichi";
+	String dbPassWord = "jktp4xe";
 
 	Connection conn = null;
 	PreparedStatement pstmtSelectUrlid = null;

@@ -10,7 +10,8 @@ public class GetUrlFromTwitter {
 		String text = null;
 		try {
 			WebConversation wc = new WebConversation();
-			//wc.setHeaderField("Referer","");
+			wc.setHeaderField("Referer",
+					"http://kjunichi.cocolog-nifty.com/misc/");
 
 			// ページを表示する
 			WebResponse homePage = wc.getResponse(twitterPageUrl);
