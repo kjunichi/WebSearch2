@@ -11,34 +11,21 @@ public class CheckKeywordsDao {
 	static private Connection connWebSearch = null;
 
 	private void init() {
-
-		String dbUrl = "jdbc:postgresql://127.0.0.1/smartmemo3";
-		String dbUser = "";
-		String dbPassWord = "";
-
-		String dbUrl2 = "jdbc:postgresql://127.0.0.1/websearch";
-		String dbUser2 = "";
-		String dbPassWord2 = "";
-
-		try {
-			Class.forName("org.postgresql.Driver");
-			connSmartMemo = DriverManager.getConnection(dbUrl, dbUser,
-					dbPassWord);
-			connWebSearch = DriverManager.getConnection(dbUrl2, dbUser2,
-					dbPassWord2);
-		} catch (Exception ex) {
-			System.out.println(ex);
-		}
-
+		connSmartMemo = Util.getSmartMemoConnection();
+		connWebSearch = Util.getWebSearchConnection();
 	}
-/**
- * 
- * @param keyword キーワード
- * @param urlid urlid
- * @param url URL
- */
-	public synchronized void insertData(String keyword,int urlid, String url) {
-	
+
+	/**
+	 * 
+	 * @param keyword
+	 *            キーワード
+	 * @param urlid
+	 *            urlid
+	 * @param url
+	 *            URL
+	 */
+	public synchronized void insertData(String keyword, int urlid, String url) {
+
 		PreparedStatement pstmt = null;
 
 		try {
@@ -77,7 +64,7 @@ public class CheckKeywordsDao {
 	}
 
 	public synchronized static CheckKeywordsDao getInstance() {
-		if(checkKeywordsDao == null) {
+		if (checkKeywordsDao == null) {
 			checkKeywordsDao = new CheckKeywordsDao();
 			checkKeywordsDao.init();
 		}
