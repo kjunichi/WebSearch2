@@ -33,16 +33,6 @@ public class CheckKeywordsFromUrl {
 		System.setProperty("sun.net.client.defaultConnectTimeout", "10000");
 		System.setProperty("sun.net.client.defaultReadTimeout", "10000");
 
-		String dbUrl = "jdbc:postgresql://127.0.0.1/websearch";
-		String dbUser = "junichi";
-		String dbPassWord = "jktp4xe";
-
-		try {
-			Class.forName("org.postgresql.Driver");
-		} catch (Exception ex) {
-			System.out.println(ex);
-		}
-
 		Statement stmt = null;
 
 		Connection conn2 = null;
@@ -72,6 +62,8 @@ public class CheckKeywordsFromUrl {
 				List<String> list = null;
 				try {
 					list = Util.getWikiTitles();
+					list.add("node.js");
+					list.add("canvas");
 					if (savedHostnames.size() > 2000) {
 						System.out.println("savedHostnames.clear");
 						savedHostnames.clear();
@@ -110,6 +102,7 @@ public class CheckKeywordsFromUrl {
 									for (String savedHostname : savedHostnames) {
 										if (hostname.equals(savedHostname)) {
 											// すでに取得したドメインの場合、除外する。
+											System.out.println(hostname + "is savedHostname!");
 											isSavedHostname = true;
 										}
 									}
@@ -132,7 +125,6 @@ public class CheckKeywordsFromUrl {
 							}
 
 						}
-
 						searchResultCount = i;
 					}
 					rs.close();
@@ -284,13 +276,6 @@ public class CheckKeywordsFromUrl {
 	private String getFxQuery(int urlid) {
 		return "select u.url,u.urlid from url u,meisi m1 where u.urlid = m1.urlid "
 				+ " and (m1.meisi='為替' or m1.meisi='政府系ファンド' or m1.meisi='FX') and u.urlid < "
-				+ urlid + "  " + " order by urlid desc limit 100";
-
-	}
-
-	private String getXXXQuery(int urlid) {
-		return "select u.url,u.urlid from url u,meisi m1 where u.urlid = m1.urlid "
-				+ " and  u.status is null and m1.meisi='アナル' and u.urlid < "
 				+ urlid + "  " + " order by urlid desc limit 100";
 
 	}
