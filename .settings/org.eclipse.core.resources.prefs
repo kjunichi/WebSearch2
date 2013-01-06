@@ -1,3 +1,5 @@
 eclipse.preferences.version=1
+encoding//src/com/cocolog_nifty/kjunichi/CheckKeywordsDao.java=UTF-8
 encoding//src/com/cocolog_nifty/kjunichi/CheckKeywordsFromUrl.java=UTF-8
 encoding//src/com/cocolog_nifty/kjunichi/CheckRelatedKeywordsFromUrl.java=UTF-8
+encoding//src/com/cocolog_nifty/kjunichi/UrlDao.java=UTF-8

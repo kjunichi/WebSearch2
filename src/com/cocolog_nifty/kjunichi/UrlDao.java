@@ -21,7 +21,7 @@ public class UrlDao {
 		PreparedStatement pstmt = null;
 
 		try {
-			// link2ƒe[ƒuƒ‹‚ÉƒŠƒ“ƒNŒ³url‚ð“o˜^
+			// link2ãƒ†ãƒ¼ãƒ–ãƒ«ã«ãƒªãƒ³ã‚¯å…ƒurlã‚’ç™»éŒ²
 
 			pstmt = connWebSearch
 					.prepareStatement("insert into link2 (url,source_urlid,lastupdate)values(?,?,now())");
@@ -31,7 +31,7 @@ public class UrlDao {
 			pstmt.close();
 			pstmt = null;
 			if (recCount > 0) {
-				// System.out.println("URLV‹K“o˜^ : " + url);
+				// System.out.println("URLæ–°è¦ç™»éŒ² : " + url);
 			}
 		} catch (SQLException e) {
 			// e.printStackTrace();
@@ -47,7 +47,7 @@ public class UrlDao {
 		}
 
 		try {
-			// urlƒe[ƒuƒ‹‚Éurl‚ð“o˜^
+			// urlãƒ†ãƒ¼ãƒ–ãƒ«ã«urlã‚’ç™»éŒ²
 			pstmt = connWebSearch
 					.prepareStatement("insert into url (url,isnew,timestamp,lastupdate)values(?,'1',now(),now())");
 			pstmt.setString(1, url);
@@ -55,11 +55,11 @@ public class UrlDao {
 			pstmt.close();
 			pstmt = null;
 			if (recCount > 0) {
-				System.out.println("URLV‹K“o˜^ : " + url);
+				System.out.println("URLæ–°è¦ç™»éŒ² : " + url);
 			}
 
 		} catch (SQLException e) {
-			// d•¡“o˜^‚ÅƒGƒ‰[‚ª”­¶‚·‚é‚±‚Æ‚ª‚ ‚éB
+			// é‡è¤‡ç™»éŒ²ã§ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã™ã‚‹ã“ã¨ãŒã‚ã‚‹ã€‚
 			// TODO Auto-generated catch block
 			// e.printStackTrace();
 		} finally {
@@ -79,7 +79,7 @@ public class UrlDao {
 		PreparedStatement pstmt = null;
 
 		try {
-			// urlƒe[ƒuƒ‹‚Éurl‚ð“o˜^
+			// urlãƒ†ãƒ¼ãƒ–ãƒ«ã«urlã‚’ç™»éŒ²
 			pstmt = connWebSearch
 					.prepareStatement("update url set rank=?,status=?,lastupdate=now() where urlid = ?");
 			pstmt.setInt(1, rank);
@@ -92,7 +92,7 @@ public class UrlDao {
 				System.out.println("URL rank : " + rank);
 			}
 		} catch (SQLException e) {
-			// d•¡“o˜^‚ÅƒGƒ‰[‚ª”­¶‚·‚é‚±‚Æ‚ª‚ ‚éB
+			// é‡è¤‡ç™»éŒ²ã§ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã™ã‚‹ã“ã¨ãŒã‚ã‚‹ã€‚
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
