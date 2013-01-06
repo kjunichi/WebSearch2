@@ -1,6 +1,7 @@
 package com.cocolog_nifty.kjunichi;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
@@ -11,10 +12,20 @@ public class CheckKeywordsDao {
 
 	private void init() {
 
+		String dbUrl = "jdbc:postgresql://127.0.0.1/smartmemo3";
+		String dbUser = "";
+		String dbPassWord = "";
+
+		String dbUrl2 = "jdbc:postgresql://127.0.0.1/websearch";
+		String dbUser2 = "";
+		String dbPassWord2 = "";
+
 		try {
 			Class.forName("org.postgresql.Driver");
-			connSmartMemo =Util.getSmartMemoConnection();
-			connWebSearch = Util.getWebSearchConnection();
+			connSmartMemo = DriverManager.getConnection(dbUrl, dbUser,
+					dbPassWord);
+			connWebSearch = DriverManager.getConnection(dbUrl2, dbUser2,
+					dbPassWord2);
 		} catch (Exception ex) {
 			System.out.println(ex);
 		}
@@ -22,7 +33,7 @@ public class CheckKeywordsDao {
 	}
 /**
  * 
- * @param keyword �L�[���[�h
+ * @param keyword キーワード
  * @param urlid urlid
  * @param url URL
  */
@@ -31,7 +42,7 @@ public class CheckKeywordsDao {
 		PreparedStatement pstmt = null;
 
 		try {
-			// meisi�e�[�u�����L�[���[�h���o�^
+			// meisiテーブルにキーワードを登録
 			pstmt = connWebSearch
 					.prepareStatement("insert into meisi (meisi,urlid,itimestamp)values(?,?,now())");
 			pstmt.setString(1, keyword);
@@ -40,7 +51,7 @@ public class CheckKeywordsDao {
 			pstmt.executeUpdate();
 			pstmt.close();
 			pstmt = null;
-			// ���AURL�e�[�u����URL���o�^
+			// 関連URLテーブルにURLを登録
 			String insertSql = "insert into related_url(meisi,url,lastupdate) values (?,?,now())";
 
 			pstmt = connSmartMemo.prepareStatement(insertSql);
@@ -49,7 +60,7 @@ public class CheckKeywordsDao {
 			int rs = pstmt.executeUpdate();
 			pstmt.close();
 			pstmt = null;
-			System.out.println(keyword + " �V�K�o�^ : " + url);
+			System.out.println(keyword + " 新規登録 : " + url);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			// e.printStackTrace();
